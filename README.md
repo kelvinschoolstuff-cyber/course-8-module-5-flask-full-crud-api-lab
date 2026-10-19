@@ -113,21 +113,47 @@ if __name__ == "__main__":
 
 ---
 
-### Task 4: Test the API
+### Run and Test the API
 
-Start the Flask development server:
+Start the Flask development server in the project environment:
 
 ```bash
-python app.py
+pipenv run python app.py
 ```
 
-Test your endpoints using Postman or curl:
+Events are stored in memory and reset when the server restarts. Send JSON requests with curl or Postman:
 
-- `POST http://localhost:5000/events`
-  - Body: `{ "title": "Hackathon" }`
-- `PATCH http://localhost:5000/events/1`
-  - Body: `{ "title": "Hackathon 2025" }`
-- `DELETE http://localhost:5000/events/2`
+Create an event (`201 Created`):
+
+```bash
+curl -X POST http://localhost:5000/events \
+  -H 'Content-Type: application/json' \
+  -d '{"title":"Hackathon"}'
+```
+
+```json
+{"id": 3, "title": "Hackathon"}
+```
+
+Update an event title (`200 OK`):
+
+```bash
+curl -X PATCH http://localhost:5000/events/1 \
+  -H 'Content-Type: application/json' \
+  -d '{"title":"Hackathon 2025"}'
+```
+
+```json
+{"id": 1, "title": "Hackathon 2025"}
+```
+
+Delete an event (`204 No Content`):
+
+```bash
+curl -X DELETE http://localhost:5000/events/2
+```
+
+Requests with a missing or invalid title return `400 Bad Request`. PATCH or DELETE requests for an unknown event return `404 Not Found` with a JSON error message.
 
 ---
 
